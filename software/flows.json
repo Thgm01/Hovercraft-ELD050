@@ -1,0 +1,325 @@
+[
+    {
+        "id": "7d2047e075cc0d79",
+        "type": "tab",
+        "label": "Hovercraft",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "60295d3c23e2906d",
+        "type": "ui_button",
+        "z": "7d2047e075cc0d79",
+        "name": "",
+        "group": "d28fa5aec3e24953",
+        "order": 2,
+        "width": "4",
+        "height": "1",
+        "passthru": false,
+        "label": "{{topic}}",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{background}}",
+        "className": "",
+        "icon": "{{myicon}}",
+        "payload": "clicked",
+        "payloadType": "str",
+        "topic": "hovercraft/enable_lift_fans",
+        "topicType": "msg",
+        "x": 890,
+        "y": 620,
+        "wires": [
+            [
+                "7ef41b0841a04ed4",
+                "75f02d7ad34165e8"
+            ]
+        ]
+    },
+    {
+        "id": "89c8c8f9d73a44c7",
+        "type": "function",
+        "z": "7d2047e075cc0d79",
+        "name": "button logic",
+        "func": "let payload=msg.payload;\nlet state=context.get(\"state\");\n\nif(msg.topic==\"init\")\n{\n    state = \"open\";\n    msg.payload = \"close\";\n    msg.background = \"red\";\n    msg.label = \"Press to Start\";\n    msg.myicon = \"airplanemode_inactive\";\n    msg.topic=\"control\";\n    context.set(\"state\", \"off\");\n    return msg;\n}\n//toggle\nif (typeof state == \"undefined\" || state==\"on\")\n{\n//state=\"open\";\nmsg.payload= \"off\";\nmsg.background = \"red\";\nmsg.label = \"Press to Start\";\nmsg.myicon = \"airplanemode_inactive\";\nstate=\"off\";\n\n}\nelse if (typeof state == \"undefined\" || state == \"off\") {\n//state = \"close\";\n\nmsg.payload= \"on\";\nmsg.background = \"green\";\nmsg.label = \"Press to Stop\";\nmsg.myicon=\"airplanemode_on\";\nstate=\"on\";\n}\ncontext.set(\"state\",state);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set(\"state\", \"closed\");",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 460,
+        "wires": [
+            [
+                "2fd3f337609e094e",
+                "55274f75badbdb69"
+            ]
+        ]
+    },
+    {
+        "id": "2fd3f337609e094e",
+        "type": "debug",
+        "z": "7d2047e075cc0d79",
+        "name": "debug out button logic",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 826,
+        "y": 413,
+        "wires": []
+    },
+    {
+        "id": "55274f75badbdb69",
+        "type": "change",
+        "z": "7d2047e075cc0d79",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "label",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 656,
+        "y": 613,
+        "wires": [
+            [
+                "60295d3c23e2906d"
+            ]
+        ]
+    },
+    {
+        "id": "92a09964d257c2f8",
+        "type": "ui_joystick",
+        "z": "7d2047e075cc0d79",
+        "name": "Joy",
+        "group": "d28fa5aec3e24953",
+        "order": 3,
+        "width": "6",
+        "height": "6",
+        "trigger": "all",
+        "timeInterval": "25",
+        "useThemeColor": true,
+        "color": "#000000",
+        "threshold": 0.1,
+        "directions": "all",
+        "shape": "circle",
+        "centerAtRelease": true,
+        "x": 910,
+        "y": 200,
+        "wires": [
+            [
+                "aa5273bde33d4fbf",
+                "16c5c58ebc6d01a6"
+            ]
+        ]
+    },
+    {
+        "id": "aa5273bde33d4fbf",
+        "type": "mqtt out",
+        "z": "7d2047e075cc0d79",
+        "name": "",
+        "topic": "hovercraft/joystick",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "e31933b57a14d7cb",
+        "x": 1110,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "16c5c58ebc6d01a6",
+        "type": "debug",
+        "z": "7d2047e075cc0d79",
+        "name": "debug joystick out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1110,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "7ef41b0841a04ed4",
+        "type": "mqtt out",
+        "z": "7d2047e075cc0d79",
+        "name": "",
+        "topic": "hovercraft/enable_lift_fans",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "e31933b57a14d7cb",
+        "x": 1146,
+        "y": 613,
+        "wires": []
+    },
+    {
+        "id": "6bf83b93a1ea0766",
+        "type": "mqtt in",
+        "z": "7d2047e075cc0d79",
+        "name": "",
+        "topic": "hovercraft/lift_fans_status",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "e31933b57a14d7cb",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 270,
+        "y": 460,
+        "wires": [
+            [
+                "89c8c8f9d73a44c7",
+                "772ccb6d2cc1f237"
+            ]
+        ]
+    },
+    {
+        "id": "772ccb6d2cc1f237",
+        "type": "debug",
+        "z": "7d2047e075cc0d79",
+        "name": "debug Lift Fans Status",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "75f02d7ad34165e8",
+        "type": "debug",
+        "z": "7d2047e075cc0d79",
+        "name": "debug button out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "b2e9f9ad27c1fc71",
+        "type": "inject",
+        "z": "7d2047e075cc0d79",
+        "name": "init",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "init",
+        "payload": "close",
+        "payloadType": "str",
+        "x": 230,
+        "y": 360,
+        "wires": [
+            [
+                "89c8c8f9d73a44c7"
+            ]
+        ]
+    },
+    {
+        "id": "92a3d4ea757fcf3c",
+        "type": "ui_spacer",
+        "z": "7d2047e075cc0d79",
+        "name": "spacer",
+        "group": "d28fa5aec3e24953",
+        "order": 1,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "d28fa5aec3e24953",
+        "type": "ui_group",
+        "name": "",
+        "tab": "b059073edf59e633",
+        "order": 1,
+        "disp": false,
+        "width": "6",
+        "collapse": false,
+        "className": "",
+        "info": "# teste"
+    },
+    {
+        "id": "e31933b57a14d7cb",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "b059073edf59e633",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
